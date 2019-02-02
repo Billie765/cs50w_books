@@ -28,9 +28,27 @@ def login():
     if request.method == "POST":
         login = request.form.get("login")
         password = request.form.get("password")
-        return render_template("end.html", login = login, password=password)
+        if db.execute("SELECT * from users WHERE login = :login",{"login":login}).rowcount == 0:
+            return render_template("error.html", message="No such user")
+            #return render_template("end.html", login = login, password=password)
+        else:
+            result = db.execute("SELECT password from users where login = :login", {'login':login}).fetchone()[0]
+            if password == result:
+                return render_template("success.html", message="You logged in")
+            else:
+                return render_template("error.html", message=f"login: {login}. password: {password}. result: {result}")
     else:
         return render_template("login.html")
-'''@app.route("/<string:name>")
-def name(name):
-    return f"Hello, {name}"'''
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if request.method == "POST":
+        login = request.form.get("login")
+        password = request.form.get("password")
+        if db.execute("SELECT * from users where login=:login", {'login':login}).rowcount == 0:
+            db.execute("INSERT into users (login, password) VALUES (:login, :password)", {'login':login, 'password':password})
+            db.commit()
+            return render_template("success.html", message="Congrats")
+        else:
+            return render_template("error.html", message="User with this login already exists")
+    else:
+        return render_template("register.html")
