@@ -1,5 +1,5 @@
 import os
-from flask import Flask, session, render_template, request
+from flask import Flask, session, render_template, request, jsonify
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -52,3 +52,12 @@ def register():
             return render_template("error.html", message="User with this login already exists")
     else:
         return render_template("register.html")
+
+@app.route("/api/<string:isbn>", methods=["GET"])
+def return_data(isbn):
+    book = db.execute("SELECT * from books where isbn=:isbn", {'isbn':isbn}).fetchone()
+    if book is None:
+        return "Sorry, book not found", 404
+    else:
+        d = {'isbn': book.isbn, 'author': book.author, 'title': book.title, 'year': book.year}
+        return jsonify(d)
