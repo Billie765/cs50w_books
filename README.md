@@ -11,6 +11,9 @@ DONE:
   - search page
   - book pages
   - api
-  
+
 TO DO:
-  - sessions(?)
+  - number of reviews on site
+  - average score on site
+  - profile pages(?)
+  - book reviews pages
