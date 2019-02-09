@@ -95,7 +95,7 @@ def search():
         return render_template("result.html", isbn=isbn, author=author,
         title=title, results=results)
 
-@app.route("/book/<string:isbn>")
+@app.route("/book/<string:isbn>", methods=["GET", "POST"])
 def book(isbn):
     book = db.execute("SELECT * FROM books where isbn=:isbn",
     {'isbn':isbn}).fetchone()
@@ -105,6 +105,20 @@ def book(isbn):
             data = data.json()
             gr_review_count = data['books'][0]['work_reviews_count']
             gr_average_score = data['books'][0]['average_rating']
+    if request.method == "POST":
+            text = request.form.get('review')
+            score = request.form.get('score')
+            if db.execute("SELECT * FROM reviews where user_id=:user_id and \
+            book_id=:book_id", {'user_id':session.get('id'), 'book_id':book.id}).rowcount==0:
+                db.execute("INSERT INTO reviews (user_id, book_id, review, \
+                rating) values (:user_id, :book_id, :review, :score)",
+                {'user_id':session.get('id'), 'book_id':book.id,
+                'review':text, 'score':score})
+                db.commit()
+                return render_template('review.html', review=text, score=score)
+            else:
+                return render_template('error.html', message='Review already exists')
+
     return render_template('book.html', title=book.title, author=book.author,
     isbn=book.isbn, year=book.year, username=session.get('user'),
     user_id=session.get('id'), goodreads_reviews=gr_review_count,
@@ -115,3 +129,7 @@ def logout():
     session['user'] = None
     session['id'] = None
     return redirect(url_for('index'))
+
+@app.route('/review', methods=['POST'])
+def review(text, score):
+    return "Review submitted"
