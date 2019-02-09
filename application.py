@@ -46,7 +46,7 @@ def login():
                 return render_template("success.html", message="You logged in")
             else:
                 return render_template("error.html",
-                message="Login/password combination you typed is wrong)
+                message="Login/password combination you typed is wrong")
     else:
         return render_template("login.html")
 
