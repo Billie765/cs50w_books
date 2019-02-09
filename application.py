@@ -61,3 +61,19 @@ def return_data(isbn):
     else:
         d = {'isbn': book.isbn, 'author': book.author, 'title': book.title, 'year': book.year}
         return jsonify(d)
+
+@app.route("/search", methods=["GET","POST"])
+def search():
+    if request.method == "GET":
+        return render_template('search.html')
+    if request.method == 'POST':
+        isbn = request.form.get("isbn")
+        author = request.form.get("author")
+        title = request.form.get("title")
+        querry = f"SELECT * from books where isbn like '%{isbn}%' and author like '%{author}%' and title like '%{title}%'"
+        results = db.execute(querry).fetchall()
+        return render_template("result.html", isbn=isbn, author=author, title=title, results=results)
+
+@app.route("/book/<string:isbn>")
+def book(isbn):
+    return "This is a book page"

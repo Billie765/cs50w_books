@@ -1,0 +1,18 @@
+{%extends "layout.html"%}
+{% block title %}
+Search result
+{% endblock %}
+
+{% block body %}
+{% if results%}
+<h1>Search results</h1>
+<ul>
+{% for result in results%}
+<li>{{result.title}} by {{result.author}}</li>
+{%endfor%}
+</ul>
+{% else %}
+<h2>Oops, sorry. Nothing found</h3>
+  <p>But you can try <a href='/search'>searching</a> with other parameters.</p>
+{% endif %}
+{% endblock %}
