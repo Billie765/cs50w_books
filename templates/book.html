@@ -7,6 +7,8 @@
 <h2>by {{author}}</h2>
 <p> {{year}}</p>
 <p>ISBN: {{isbn}}</p>
+<p>Goodreads review count: {{goodreads_reviews}}</p>
+<p>Goodreads average score: {{goodreads_score}}</p>
 {%if username%}
 <p>You can leave your review for the book</p>
 <form action="/review" method="POST" id='reviewform'>

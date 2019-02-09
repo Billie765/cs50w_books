@@ -1,7 +1,8 @@
 import os
-from flask import Flask, session, render_template, request, jsonify, url_for, redirect
+from flask import Flask, session, render_template, request, jsonify, url_for, redirect, json
 from flask_session import Session
 from sqlalchemy import create_engine
+import requests
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 app = Flask(__name__)
@@ -14,6 +15,8 @@ if not os.getenv("DATABASE_URL"):
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
+
+key = "IBUpDTPyv7yb0P01f469Q"
 
 # Set up database
 engine = create_engine(os.getenv("DATABASE_URL"))
@@ -96,9 +99,16 @@ def search():
 def book(isbn):
     book = db.execute("SELECT * FROM books where isbn=:isbn",
     {'isbn':isbn}).fetchone()
+    data = requests.get("https://www.goodreads.com/book/review_counts.json",
+    params={"key":key, 'isbns':isbn})
+    if data.ok:
+            data = data.json()
+            gr_review_count = data['books'][0]['work_reviews_count']
+            gr_average_score = data['books'][0]['average_rating']
     return render_template('book.html', title=book.title, author=book.author,
     isbn=book.isbn, year=book.year, username=session.get('user'),
-    user_id=session.get('id'))
+    user_id=session.get('id'), goodreads_reviews=gr_review_count,
+    goodreads_score=gr_average_score)
 
 @app.route('/logout')
 def logout():
