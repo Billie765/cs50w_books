@@ -19,10 +19,9 @@ Session(app)
 engine = create_engine(os.getenv("DATABASE_URL"))
 db = scoped_session(sessionmaker(bind=engine))
 
-
 @app.route("/")
 def index():
-    return "Project 1: TODO. What's next?"
+    return render_template('home.html')
 @app.route("/login", methods=["GET","POST"])
 def login():
     if request.method == "POST":
