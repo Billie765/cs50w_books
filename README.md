@@ -6,8 +6,9 @@ DONE:
   - Login
   - Registration
   - importing books
-TO DO:
-  - searching
-  - api
+  - search page
   - book pages
+  - api
+  
+TO DO:
   - sessions(?)
