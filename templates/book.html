@@ -7,15 +7,13 @@
 <h2>by {{author}}</h2>
 <p> {{year}}</p>
 <p>ISBN: {{isbn}}</p>
+<p>You can leave your review for the book</p>
 <form action="/review" method="POST">
   <textarea name='review' placeholder="Type your review" cols=30 rows=5 required>
   </textarea>
   <br>
-  <input type=radio name='rating' value=1>1
-  <input type=radio name='rating' value=2>2
-  <input type=radio name='rating' value=3>3
-  <input type=radio name='rating' value=4>4
-  <input type=radio name='rating' value=5>5
+  <label>Please, rate the book</label>
+  <input type=number min=1 max=5 required>
   <input type=submit value="Submit your review">
 </form>
 {% endblock %}
