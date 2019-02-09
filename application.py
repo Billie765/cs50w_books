@@ -76,4 +76,5 @@ def search():
 
 @app.route("/book/<string:isbn>")
 def book(isbn):
-    return "This is a book page"
+    book = db.execute("SELECT * FROM books where isbn=:isbn", {'isbn':isbn}).fetchone()
+    return render_template('book.html', title=book.title, author=book.author, isbn=book.isbn, year=book.year)
