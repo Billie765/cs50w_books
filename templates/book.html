@@ -7,13 +7,18 @@
 <h2>by {{author}}</h2>
 <p> {{year}}</p>
 <p>ISBN: {{isbn}}</p>
+{%if username%}
 <p>You can leave your review for the book</p>
-<form action="/review" method="POST">
-  <textarea name='review' placeholder="Type your review" cols=30 rows=5 required>
+<form action="/review" method="POST" id='reviewform'>
+  <textarea required name='review' placeholder="Type your review" cols=30
+  rows=5 form='reviewform'>
   </textarea>
   <br>
   <label>Please, rate the book</label>
   <input type=number min=1 max=5 required>
   <input type=submit value="Submit your review">
 </form>
+{%else%}
+<p>You need <a href='/login'>log in</a> to submit book reviews</p>
+{%endif%}
 {% endblock %}

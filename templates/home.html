@@ -4,7 +4,12 @@ Project 1
 {%endblock%}
 {% block body %}
 <h3>Welcome to the Project1</h3>
-<p>Here you can <a href='search'>search</a> for books</p>
+<p>Here you can <a href='search'>search</a> for books.</p>
+{% if not username%}
 <p>Do you have an account? <a href='login'>Log in</a>.
- Or you can also <a href='register'>sign up</a> for one</p>
+ Or you can also <a href='register'>sign up</a> for one.</p>
+{%else%}
+<p>Hello, {{username}}!</p>
+<p>You can <a href='logout'>logout</a>.</p>
+{% endif %}
 {% endblock%}
