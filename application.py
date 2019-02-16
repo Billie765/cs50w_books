@@ -105,6 +105,13 @@ def book(isbn):
             data = data.json()
             gr_review_count = data['books'][0]['work_reviews_count']
             gr_average_score = data['books'][0]['average_rating']
+            review_count = db.execute("SELECT * from reviews where book_id in \
+            (select id from books where isbn=:isbn)", {'isbn':isbn}).rowcount
+            if review_count > 0:
+                book_score = db.execute("select avg(rating) from reviews where \
+                book_id in (select id from books where isbn=:isbn)",{'isbn':isbn}
+                ).fetchone()
+                book_score = str(book_score)[10:14]
     if request.method == "POST":
             text = request.form.get('review')
             score = request.form.get('score')
@@ -122,7 +129,13 @@ def book(isbn):
     return render_template('book.html', title=book.title, author=book.author,
     isbn=book.isbn, year=book.year, username=session.get('user'),
     user_id=session.get('id'), goodreads_reviews=gr_review_count,
-    goodreads_score=gr_average_score)
+    goodreads_score=gr_average_score, review_count=review_count, book_score=book_score)
+
+@app.route('/book/<string:isbn>/reviews')
+def reviews(isbn):
+    reviews = db.execute("SELECT * from reviews where book_id in \
+    (select id from books where isbn=:isbn)", {'isbn':isbn})
+    return render_template('reviews.html', isbn=isbn, reviews=reviews)
 
 @app.route('/logout')
 def logout():

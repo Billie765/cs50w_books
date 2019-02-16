@@ -1,0 +1,13 @@
+{%extends "layout.html"%}
+{% block title %}
+Search result
+{% endblock %}
+
+{% block body %}
+<h1>Book reviews</h1>
+<ul>
+{% for review in review%}
+<li><a href=#>I am a review</a></li>
+{%endfor%}
+</ul>
+{% endblock %}

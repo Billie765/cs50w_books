@@ -9,6 +9,13 @@
 <p>ISBN: {{isbn}}</p>
 <p>Goodreads review count: {{goodreads_reviews}}</p>
 <p>Goodreads average score: {{goodreads_score}}</p>
+{%if review_count > 0%}
+<p> The book has reviews</a>!</p>
+<p> The number of reviews on the site: {{review_count}}</p>
+<p> And the average score is: {{book_score}}</p>
+{%else%}
+</p>This book has no reviews yet. You can be the first to write one</p>
+{%endif%}
 {%if username%}
 <p>You can leave your review for the book</p>
 <form action="" method="POST" id='reviewform'>
